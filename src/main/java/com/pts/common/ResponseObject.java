@@ -16,6 +16,8 @@ public class ResponseObject<T> implements Serializable{
     private String message;   // thông điệp đi kèm
     private T data;           // dữ liệu trả về (nếu có)
 
+    public ResponseObject() {}
+
     public ResponseObject(T data) {
         this.data = data;
     }
