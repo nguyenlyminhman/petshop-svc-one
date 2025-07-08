@@ -1,10 +1,12 @@
 package com.pts.adm.config;
 
+import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
 import io.swagger.v3.oas.models.servers.Server;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -13,11 +15,14 @@ import java.util.Arrays;
 @Configuration
 public class SwaggerConfig {
 
+    @Value("${server.port}")
+    private String serverPort;
+
     @Bean
     public OpenAPI customOpenAPI() {
         // Define servers
         Server localServer = new Server()
-                .url("http://localhost:8080/pet-shop")
+                .url("http://localhost:"+ serverPort +"/pet-shop")
                 .description("Local Server");
 
         Server devServer = new Server()
@@ -44,8 +49,8 @@ public class SwaggerConfig {
                         .title("Pet Shop API")
                         .description("API documentation for Pet Shop system")
                         .version("1.0.0"))
-                .servers(Arrays.asList(localServer, devServer, prodServer));
-                // .components(new Components().addSecuritySchemes("bearerAuth", bearerAuthScheme))
-                // .addSecurityItem(securityRequirement); // Apply to all APIs by default
+                .servers(Arrays.asList(localServer, devServer, prodServer))
+                .components(new Components().addSecuritySchemes("bearerAuth", bearerAuthScheme))
+                .addSecurityItem(securityRequirement); // Apply to all APIs by default
     }
 }
